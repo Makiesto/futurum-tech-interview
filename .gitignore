@@ -1,0 +1,43 @@
+# ========================
+# Backend (Java / Maven / Gradle)
+# ========================
+backend/.idea/
+backend/*.iml
+backend/.classpath
+backend/.project
+backend/.settings/
+backend/logs/
+backend/*.log
+backend/out/
+
+# Maven specific
+backend/.mvn/
+backend/pom.xml.tag
+backend/pom.xml.releaseBackup
+backend/pom.xml.versionsBackup
+backend/target/
+
+# Gradle specific
+backend/.gradle/
+backend/build/
+
+# ========================
+# Frontend (Node / React)
+# ========================
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.env
+frontend/.cache/
+frontend/npm-debug.log*
+frontend/yarn-error.log*
+
+# VSCode / IDE
+frontend/.vscode/
+frontend/.idea/
+
+# ========================
+# General
+# ========================
+.DS_Store
+*.log
