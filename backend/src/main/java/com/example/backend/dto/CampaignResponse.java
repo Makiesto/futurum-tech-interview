@@ -14,5 +14,5 @@ public class CampaignResponse {
     private BigDecimal campaignFund;
     private Boolean isActive;
     private String town;
-    private Integer radius;
+    private Double radius;
 }

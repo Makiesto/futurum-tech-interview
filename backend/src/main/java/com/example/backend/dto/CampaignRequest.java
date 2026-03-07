@@ -30,5 +30,5 @@ public class CampaignRequest {
 
     @NotNull(message = "Radius is mandatory")
     @Min(value = 1, message = "Radius must be at least 1km")
-    private Integer radius;
+    private Double radius;
 }
