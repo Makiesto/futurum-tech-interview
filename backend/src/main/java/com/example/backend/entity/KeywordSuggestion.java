@@ -17,6 +17,6 @@ public class KeywordSuggestion {
     private Long id;
 
     @NotBlank
-    @Column(unique = true)
+    @Column(name = "keyword_value", unique = true)
     private String value;
 }
