@@ -1,32 +1,18 @@
-package com.example.backend.entity;
+package com.example.backend.dto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.*;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-@Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class Campaign {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "seller_id")
-    private Seller seller;
+@Data
+public class CampaignRequest {
 
     @NotBlank(message = "Campaign name is mandatory")
     private String name;
 
-    @ElementCollection
-    @Size(min=1, message = "At least one keyword is required")
+    @NotEmpty(message = "At least one keyword is required")
     private List<String> keywords;
 
     @NotNull(message = "Bid amount is mandatory")
@@ -44,7 +30,5 @@ public class Campaign {
 
     @NotNull(message = "Radius is mandatory")
     @Min(value = 1, message = "Radius must be at least 1km")
-    private Double radius;
-
-
+    private Integer radius;
 }
