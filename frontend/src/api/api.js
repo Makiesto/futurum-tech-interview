@@ -17,10 +17,10 @@ export const updateCampaign = (id, campaign) => api.put(`/campaigns/${id}`, camp
 export const deleteCampaign = (id) => api.delete(`/campaigns/${id}`);
 
 // seller
-export const getSeller = () => api.get('/seller');
+export const getSeller = () => api.get('/sellers');
 
 // keywords
 export const getKeywords = (query) => api.get(`/keywords?query=${query}`);
 
-// owns
+// towns
 export const getTowns = () => api.get('/towns');
