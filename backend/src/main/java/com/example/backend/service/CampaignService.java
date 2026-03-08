@@ -6,6 +6,7 @@ import com.example.backend.entity.Campaign;
 import com.example.backend.entity.Seller;
 import com.example.backend.repository.CampaignRepository;
 import com.example.backend.repository.SellerRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +30,7 @@ public class CampaignService {
 
     public CampaignResponse getCampaignById(UUID id) {
         Campaign campaign = campaignRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Campaign not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Campaign not found"));
 
         return toResponse(campaign);
     }
@@ -55,7 +56,7 @@ public class CampaignService {
     @Transactional
     public CampaignResponse updateCampaign(UUID id, CampaignRequest request) {
         Campaign existing = campaignRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Campaign not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Campaign not found"));
         Seller seller = getDefaultSeller();
 
         // return old fund to balance
@@ -78,7 +79,7 @@ public class CampaignService {
     @Transactional
     public void deleteCampaign(UUID id) {
         Campaign campaign = campaignRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Campaign not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Campaign not found"));
 
         Seller seller = getDefaultSeller();
 
