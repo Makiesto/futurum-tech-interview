@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/campaigns")
@@ -24,7 +25,7 @@ public class CampaignController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CampaignResponse> getCampaignById(@PathVariable Long id) {
+    public ResponseEntity<CampaignResponse> getCampaignById(@PathVariable UUID id) {
         return ResponseEntity.ok(campaignService.getCampaignById(id));
     }
 
@@ -34,12 +35,12 @@ public class CampaignController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CampaignResponse> updateCampaign(@PathVariable Long id, @Valid @RequestBody CampaignRequest request) {
+    public ResponseEntity<CampaignResponse> updateCampaign(@PathVariable UUID id, @Valid @RequestBody CampaignRequest request) {
         return ResponseEntity.ok(campaignService.updateCampaign(id, request));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCampaign(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteCampaign(@PathVariable UUID id) {
         campaignService.deleteCampaign(id);
         return ResponseEntity.noContent().build();
     }

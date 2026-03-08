@@ -4,10 +4,11 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 public class CampaignResponse {
-    private Long id;
+    private UUID id;
     private String name;
     private List<String> keywords;
     private BigDecimal bidAmount;

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +27,7 @@ public class CampaignService {
                 .toList();
     }
 
-    public CampaignResponse getCampaignById(Long id) {
+    public CampaignResponse getCampaignById(UUID id) {
         Campaign campaign = campaignRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Campaign not found"));
 
@@ -52,7 +53,7 @@ public class CampaignService {
     }
 
     @Transactional
-    public CampaignResponse updateCampaign(Long id, CampaignRequest request) {
+    public CampaignResponse updateCampaign(UUID id, CampaignRequest request) {
         Campaign existing = campaignRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Campaign not found"));
         Seller seller = getDefaultSeller();
@@ -75,7 +76,7 @@ public class CampaignService {
     }
 
     @Transactional
-    public void deleteCampaign(Long id) {
+    public void deleteCampaign(UUID id) {
         Campaign campaign = campaignRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Campaign not found"));
 
