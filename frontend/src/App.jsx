@@ -1,35 +1,86 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import {useState, useEffect} from 'react';
+import {getSeller} from './api/api';
+import CampaignList from './components/CampaignList';
+import CampaignForm from './components/CampaignForm';
+import toast, { Toaster } from 'react-hot-toast';
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [seller, setSeller] = useState(null);
+    const [editingCampaign, setEditingCampaign] = useState(null);
+    const [showForm, setShowForm] = useState(false);
+    const [refreshList, setRefreshList] = useState(false);
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    useEffect(() => {
+        fetchSeller();
+    }, []);
+
+    const fetchSeller = async () => {
+        const response = await getSeller();
+        setSeller(response.data);
+    };
+
+    const handleCreate = () => {
+        setEditingCampaign(null);
+        setShowForm(true);
+    };
+
+    const handleEdit = (campaign) => {
+        setEditingCampaign(campaign);
+        setShowForm(true);
+    };
+
+    const handleFormSuccess = () => {
+        setShowForm(false);
+        setEditingCampaign(null);
+        fetchSeller();
+        setRefreshList(prev => !prev);
+    };
+
+    const handleCancel = () => {
+        setShowForm(false);
+        setEditingCampaign(null);
+    };
+
+    return (
+        <div style={{maxWidth: '1000px', margin: '0 auto', padding: '20px'}}>
+        <Toaster position="top-right" />
+            <h1>Campaign Manager</h1>
+
+            {seller && (
+                <div style={{
+                    padding: '10px 20px',
+                    background: '#2e7d32',
+                    borderRadius: '8px',
+                    marginBottom: '20px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    color: 'white'
+                }}>
+                    <span>👤 <strong>{seller.name}</strong></span>
+                    <span>💎 Emerald Balance: <strong>${seller.emeraldBalance.toFixed(2)}</strong></span>
+                </div>
+            )}
+
+            {showForm ? (
+                <CampaignForm
+                    campaign={editingCampaign}
+                    seller={seller}
+                    onSuccess={handleFormSuccess}
+                    onCancel={handleCancel}
+                />
+            ) : (
+                <>
+                    <button onClick={handleCreate}>+ New Campaign</button>
+                    <CampaignList
+                        onEdit={handleEdit}
+                        onDelete={handleFormSuccess}
+                        refresh={refreshList}
+                    />
+                </>
+            )}
+        </div>
+    );
 }
 
-export default App
+export default App;
