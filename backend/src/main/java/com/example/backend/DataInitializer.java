@@ -16,6 +16,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
 
+    private static final List<String> KEYWORDS = List.of(
+            "sport", "shoes", "electronics", "clothing",
+            "fitness", "home appliances", "TV", "furniture",
+            "toys", "books", "gaming", "outdoor"
+    );
+
     private final SellerRepository sellerRepository;
     private final KeywordSuggestionRepository keywordRepository;
 
@@ -29,15 +35,13 @@ public class DataInitializer implements CommandLineRunner {
             sellerRepository.save(seller);
         }
 
+
         if (keywordRepository.count() == 0) {
-            List.of("sport", "shoes", "electronics", "clothing",
-                    "fitness", "home appliances", "TV", "furniture",
-                    "toys", "books", "gaming", "outdoor")
-                .forEach(k -> {
-                    KeywordSuggestion keyword = new KeywordSuggestion();
-                    keyword.setValue(k);
-                    keywordRepository.save(keyword);
-                });
+            KEYWORDS.forEach(value -> {
+                KeywordSuggestion keyword = new KeywordSuggestion();
+                keyword.setValue(value);
+                keywordRepository.save(keyword);
+            });
         }
     }
 }
