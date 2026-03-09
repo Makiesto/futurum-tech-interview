@@ -7,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import tools.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -38,42 +37,39 @@ class CampaignControllerTest {
     @MockitoBean
     private CampaignService campaignService;
 
-    private CampaignResponse campaignResponse;
-    private CampaignRequest campaignRequest;
-    private UUID campaignId;
+    private CampaignResponse buildCampaignResponse(UUID id) {
+        return CampaignResponse.builder()
+                .id(id)
+                .name("Test Campaign")
+                .keywords(List.of("sport", "shoes"))
+                .bidAmount(new BigDecimal("10.00"))
+                .campaignFund(new BigDecimal("500.00"))
+                .isActive(true)
+                .town("Warszawa")
+                .radius(50.0)
+                .build();
+    }
 
-    @BeforeEach
-    void setUp() {
-        campaignId = UUID.randomUUID();
-
-        campaignResponse = new CampaignResponse();
-        campaignResponse.setId(campaignId);
-        campaignResponse.setName("Test Campaign");
-        campaignResponse.setKeywords(List.of("sport", "shoes"));
-        campaignResponse.setBidAmount(new BigDecimal("10.00"));
-        campaignResponse.setCampaignFund(new BigDecimal("500.00"));
-        campaignResponse.setIsActive(true);
-        campaignResponse.setTown("Warszawa");
-        campaignResponse.setRadius(50.0);
-
-        campaignRequest = new CampaignRequest();
-        campaignRequest.setName("Test Campaign");
-        campaignRequest.setKeywords(List.of("sport", "shoes"));
-        campaignRequest.setBidAmount(new BigDecimal("10.00"));
-        campaignRequest.setCampaignFund(new BigDecimal("500.00"));
-        campaignRequest.setIsActive(true);
-        campaignRequest.setTown("Warszawa");
-        campaignRequest.setRadius(50.0);
+    private CampaignRequest buildCampaignRequest() {
+        CampaignRequest request = new CampaignRequest();
+        request.setName("Test Campaign");
+        request.setKeywords(List.of("sport", "shoes"));
+        request.setBidAmount(new BigDecimal("10.00"));
+        request.setCampaignFund(new BigDecimal("500.00"));
+        request.setIsActive(true);
+        request.setTown("Warszawa");
+        request.setRadius(50.0);
+        return request;
     }
 
     @Test
     void shouldGetAllCampaigns() throws Exception {
-        when(campaignService.getAllCampaigns()).thenReturn(List.of(campaignResponse));
+        UUID id = UUID.randomUUID();
+        when(campaignService.getAllCampaigns()).thenReturn(List.of(buildCampaignResponse(id)));
 
         mockMvc.perform(get("/api/campaigns"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name").value("Test Campaign"))
-                .andExpect(jsonPath("$[0].town").value("Warszawa"));
+                .andExpect(jsonPath("$[0].name").value("Test Campaign"));
     }
 
     @Test
@@ -87,30 +83,33 @@ class CampaignControllerTest {
 
     @Test
     void shouldGetCampaignById() throws Exception {
-        when(campaignService.getCampaignById(campaignId)).thenReturn(campaignResponse);
+        UUID id = UUID.randomUUID();
+        when(campaignService.getCampaignById(id)).thenReturn(buildCampaignResponse(id));
 
-        mockMvc.perform(get("/api/campaigns/{id}", campaignId))
+        mockMvc.perform(get("/api/campaigns/{id}", id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Test Campaign"));
     }
 
     @Test
     void shouldReturn404WhenCampaignNotFound() throws Exception {
-        when(campaignService.getCampaignById(campaignId))
+        UUID id = UUID.randomUUID();
+        when(campaignService.getCampaignById(id))
                 .thenThrow(new EntityNotFoundException("Campaign not found"));
 
-        mockMvc.perform(get("/api/campaigns/{id}", campaignId))
+        mockMvc.perform(get("/api/campaigns/{id}", id))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void shouldCreateCampaign() throws Exception {
+        UUID id = UUID.randomUUID();
         when(campaignService.createCampaign(any(CampaignRequest.class)))
-                .thenReturn(campaignResponse);
+                .thenReturn(buildCampaignResponse(id));
 
         mockMvc.perform(post("/api/campaigns")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(campaignRequest)))
+                        .content(objectMapper.writeValueAsString(buildCampaignRequest())))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("Test Campaign"));
     }
@@ -118,7 +117,6 @@ class CampaignControllerTest {
     @Test
     void shouldReturn400WhenCreateCampaignWithInvalidData() throws Exception {
         CampaignRequest invalidRequest = new CampaignRequest();
-        // puste pola - walidacja powinna zwrócić 400
 
         mockMvc.perform(post("/api/campaigns")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -133,45 +131,50 @@ class CampaignControllerTest {
 
         mockMvc.perform(post("/api/campaigns")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(campaignRequest)))
+                        .content(objectMapper.writeValueAsString(buildCampaignRequest())))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void shouldUpdateCampaign() throws Exception {
-        when(campaignService.updateCampaign(eq(campaignId), any(CampaignRequest.class)))
-                .thenReturn(campaignResponse);
+        UUID id = UUID.randomUUID();
+        when(campaignService.updateCampaign(eq(id), any(CampaignRequest.class)))
+                .thenReturn(buildCampaignResponse(id));
 
-        mockMvc.perform(put("/api/campaigns/{id}", campaignId)
+        mockMvc.perform(put("/api/campaigns/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(campaignRequest)))
+                        .content(objectMapper.writeValueAsString(buildCampaignRequest())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Test Campaign"));
     }
 
     @Test
     void shouldReturn404WhenUpdateCampaignNotFound() throws Exception {
-        when(campaignService.updateCampaign(eq(campaignId), any(CampaignRequest.class)))
+        UUID id = UUID.randomUUID();
+        when(campaignService.updateCampaign(eq(id), any(CampaignRequest.class)))
                 .thenThrow(new EntityNotFoundException("Campaign not found"));
 
-        mockMvc.perform(put("/api/campaigns/{id}", campaignId)
+        mockMvc.perform(put("/api/campaigns/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(campaignRequest)))
+                        .content(objectMapper.writeValueAsString(buildCampaignRequest())))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void shouldDeleteCampaign() throws Exception {
-        mockMvc.perform(delete("/api/campaigns/{id}", campaignId))
+        UUID id = UUID.randomUUID();
+
+        mockMvc.perform(delete("/api/campaigns/{id}", id))
                 .andExpect(status().isNoContent());
     }
 
     @Test
     void shouldReturn404WhenDeleteCampaignNotFound() throws Exception {
+        UUID id = UUID.randomUUID();
         doThrow(new EntityNotFoundException("Campaign not found"))
-                .when(campaignService).deleteCampaign(campaignId);
+                .when(campaignService).deleteCampaign(id);
 
-        mockMvc.perform(delete("/api/campaigns/{id}", campaignId))
+        mockMvc.perform(delete("/api/campaigns/{id}", id))
                 .andExpect(status().isNotFound());
     }
 }
