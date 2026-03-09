@@ -11,12 +11,14 @@ import java.util.List;
 @RequestMapping("/api/towns")
 public class TownController {
 
-    @GetMapping
-    public ResponseEntity<List<String>> getTowns() {
-        return ResponseEntity.ok(List.of(
+    private static final List<String> TOWNS = List.of(
             "Warszawa", "Kraków", "Wrocław", "Poznań",
             "Gdańsk", "Szczecin", "Łódź", "Katowice",
             "Lublin", "Białystok"
-        ));
+    );
+
+    @GetMapping
+    public ResponseEntity<List<String>> getTowns() {
+        return ResponseEntity.ok(TOWNS);
     }
 }
