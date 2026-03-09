@@ -16,10 +16,10 @@ public class SellerService {
         Seller seller = sellerRepository.findById(1L)
                 .orElseThrow(() -> new RuntimeException("Seller not found"));
 
-        SellerResponse response = new SellerResponse();
-        response.setId(seller.getId());
-        response.setName(seller.getName());
-        response.setEmeraldBalance(seller.getEmeraldBalance());
-        return response;
+        return SellerResponse.builder()
+                .id(seller.getId())
+                .name(seller.getName())
+                .emeraldBalance(seller.getEmeraldBalance())
+                .build();
     }
 }

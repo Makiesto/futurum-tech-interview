@@ -96,16 +96,16 @@ public class CampaignService {
     }
 
     private CampaignResponse toCampaignResponse(Campaign campaign) {
-        CampaignResponse response = new CampaignResponse();
-        response.setId(campaign.getId());
-        response.setName(campaign.getName());
-        response.setKeywords(campaign.getKeywords());
-        response.setBidAmount(campaign.getBidAmount());
-        response.setCampaignFund(campaign.getCampaignFund());
-        response.setIsActive(campaign.getIsActive());
-        response.setTown(campaign.getTown());
-        response.setRadius(campaign.getRadius());
-        return response;
+        return CampaignResponse.builder()
+                .id(campaign.getId())
+                .name(campaign.getName())
+                .keywords(campaign.getKeywords())
+                .bidAmount(campaign.getBidAmount())
+                .campaignFund(campaign.getCampaignFund())
+                .isActive(campaign.getIsActive())
+                .town(campaign.getTown())
+                .radius(campaign.getRadius())
+                .build();
     }
 
     private Campaign toEntity(CampaignRequest request, Seller seller) {
