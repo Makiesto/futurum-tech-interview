@@ -24,7 +24,7 @@ public class CampaignService {
     public List<CampaignResponse> getAllCampaigns() {
         return campaignRepository.findAll()
                 .stream()
-                .map(this::toResponse)
+                .map(this::toCampaignResponse)
                 .toList();
     }
 
@@ -32,7 +32,7 @@ public class CampaignService {
         Campaign campaign = campaignRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Campaign not found"));
 
-        return toResponse(campaign);
+        return toCampaignResponse(campaign);
     }
 
     @Transactional
@@ -50,7 +50,7 @@ public class CampaignService {
 
         // save campaign
         Campaign campaign = toEntity(request, seller);
-        return toResponse(campaignRepository.save(campaign));
+        return toCampaignResponse(campaignRepository.save(campaign));
     }
 
     @Transactional
@@ -73,7 +73,7 @@ public class CampaignService {
         // campaign update
         updateCampaignFields(existing, request);
 
-        return toResponse(campaignRepository.save(existing));
+        return toCampaignResponse(campaignRepository.save(existing));
     }
 
     @Transactional
@@ -95,7 +95,7 @@ public class CampaignService {
                 .orElseThrow(() -> new RuntimeException("Seller not found"));
     }
 
-    private CampaignResponse toResponse(Campaign campaign) {
+    private CampaignResponse toCampaignResponse(Campaign campaign) {
         CampaignResponse response = new CampaignResponse();
         response.setId(campaign.getId());
         response.setName(campaign.getName());
