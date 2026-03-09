@@ -14,9 +14,9 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:5173",
-                                "https://futurum-tech-interview.onrender.com",
-                                "https://futurum-tech-interview-1.onrender.com")
+                        .allowedOrigins("http://localhost:5173", // local development
+                                "http://localhost", // local docker
+                                "https://futurum-tech-interview-1.onrender.com") // production
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
                         .allowedHeaders("*");
             }
