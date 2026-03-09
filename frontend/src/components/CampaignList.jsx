@@ -10,11 +10,21 @@ function CampaignList({onEdit, onDelete, refresh}) {
         fetchCampaigns();
     }, [refresh]);
 
-    const fetchCampaigns = async () => {
+    const fetchCampaigns = async (retryCount = 0) => {
+        const MAX_RETRIES = 3;
         setLoading(true);
-        const response = await getAllCampaigns();
-        setCampaigns(response.data);
-        setLoading(false);
+        try {
+            const response = await getAllCampaigns();
+            setCampaigns(response.data);
+        } catch (error) {
+            if (retryCount < MAX_RETRIES) {
+                setTimeout(() => fetchCampaigns(retryCount + 1), 3000);
+            } else {
+                toast.error('Failed to load campaigns. Please refresh the page.');
+            }
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleDelete = async (id) => {
@@ -27,7 +37,7 @@ function CampaignList({onEdit, onDelete, refresh}) {
 
     return (
         <div>
-            <h2>Campaigns</h2>
+            <h2 style={{marginTop: '20px'}}>Campaigns</h2>
             {loading ? (
                 <div style={{textAlign: 'center', padding: '20px'}}>
                     Loading...
