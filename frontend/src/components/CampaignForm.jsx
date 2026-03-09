@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react';
 import Select from 'react-select';
+import CreatableSelect from 'react-select/creatable';
 import {createCampaign, updateCampaign, getKeywords, getTowns} from '../api/api';
 import toast from 'react-hot-toast';
 
@@ -126,7 +127,7 @@ function CampaignForm({campaign, seller, onSuccess, onCancel}) {
 
             <div style={fieldStyle}>
                 <label>Keywords *</label>
-                <Select
+                <CreatableSelect
                     isMulti
                     styles={selectStyles}
                     value={formData.keywords}
@@ -229,47 +230,47 @@ const inputStyle = {
     width: '100%',
     padding: '8px',
     boxSizing: 'border-box',
-    backgroundColor: 'white',
-    color: '#1a1a1a',
-    border: '1px solid #ccc',
+    backgroundColor: '#2a2a2a',
+    color: '#e0e0e0',
+    border: '1px solid #444',
     borderRadius: '4px'
 };
 const errorStyle = {color: 'red', fontSize: '12px'};
 const selectStyles = {
     control: (base) => ({
         ...base,
-        backgroundColor: 'white',
-        border: '1px solid #ccc',
+        backgroundColor: '#2a2a2a',
+        border: '1px solid #444',
         borderRadius: '4px',
     }),
     input: (base) => ({
         ...base,
-        color: '#1a1a1a'
+        color: '#e0e0e0'
     }),
     singleValue: (base) => ({
         ...base,
-        color: '#1a1a1a'
+        color: '#e0e0e0'
     }),
     multiValue: (base) => ({
         ...base,
-        backgroundColor: '#e8f5e9',
+        backgroundColor: '#2e7d32',
     }),
     multiValueLabel: (base) => ({
         ...base,
-        color: '#1a1a1a'
+        color: 'white'
     }),
     menu: (base) => ({
         ...base,
-        backgroundColor: 'white',
+        backgroundColor: '#2a2a2a',
     }),
     option: (base, state) => ({
         ...base,
-        backgroundColor: state.isFocused ? '#e8f5e9' : 'white',
-        color: '#1a1a1a'
+        backgroundColor: state.isFocused ? '#2e7d32' : '#2a2a2a',
+        color: '#e0e0e0'
     }),
     placeholder: (base) => ({
         ...base,
-        color: '#aaa'
+        color: '#888'
     })
 };
 
