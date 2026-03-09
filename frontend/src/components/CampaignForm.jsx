@@ -20,8 +20,11 @@ function CampaignForm({campaign, seller, onSuccess, onCancel}) {
     const [errors, setErrors] = useState({});
 
     const previewBalance = seller
-        ? seller.emeraldBalance - (parseFloat(formData.campaignFund) || 0)
+        ? seller.emeraldBalance
+        + (campaign ? parseFloat(campaign.campaignFund || 0) : 0)
+        - (parseFloat(formData.campaignFund) || 0)
         : 0;
+
 
     useEffect(() => {
         fetchTowns();
@@ -65,7 +68,15 @@ function CampaignForm({campaign, seller, onSuccess, onCancel}) {
         if (formData.keywords.length === 0) newErrors.keywords = 'At least one keyword is required';
         if (!formData.bidAmount || formData.bidAmount < 0.01) newErrors.bidAmount = 'Bid amount must be at least 0.01';
         if (!formData.campaignFund || formData.campaignFund < 0.01) newErrors.campaignFund = 'Campaign fund is mandatory';
-        if (seller && parseFloat(formData.campaignFund) > seller.emeraldBalance) newErrors.campaignFund = ' Insufficient funds';
+
+        const availableBalance = campaign
+            ? seller.emeraldBalance + parseFloat(campaign.campaignFund || 0)
+            : seller.emeraldBalance;
+
+        if (seller && parseFloat(formData.campaignFund) > availableBalance) {
+            newErrors.campaignFund = 'Insufficient funds';
+        }
+
         if (!formData.radius || formData.radius < 1) newErrors.radius = 'Radius must be at least 1km';
         if (formData.radius > 500) newErrors.radius = 'Radius cannot exceed 500km';
         return newErrors;
