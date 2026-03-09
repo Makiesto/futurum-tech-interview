@@ -80,13 +80,13 @@ function CampaignList({onEdit, onDelete, refresh}) {
                             <td style={tdStyle}>
                                 <button
                                     onClick={() => onEdit(campaign)}
-                                    style={{marginRight: '8px'}}
+                                    style={{marginRight: '8px', marginBottom: '8px', display: 'block'}}
                                 >
                                     Edit
                                 </button>
                                 <button
                                     onClick={() => handleDelete(campaign.id)}
-                                    style={{color: 'red'}}
+                                    style={{ display: 'block' }}
                                 >
                                     Delete
                                 </button>
