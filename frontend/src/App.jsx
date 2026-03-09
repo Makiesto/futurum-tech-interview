@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react';
 import {getSeller} from './api/api';
 import CampaignList from './components/CampaignList';
 import CampaignForm from './components/CampaignForm';
-import toast, { Toaster } from 'react-hot-toast';
+import toast, {Toaster} from 'react-hot-toast';
 
 function App() {
     const [seller, setSeller] = useState(null);
@@ -14,9 +14,18 @@ function App() {
         fetchSeller();
     }, []);
 
-    const fetchSeller = async () => {
-        const response = await getSeller();
-        setSeller(response.data);
+    const fetchSeller = async (retryCount = 0) => {
+        const MAX_RETRIES = 3;
+        try {
+            const response = await getSeller();
+            setSeller(response.data);
+        } catch (error) {
+            if (retryCount < MAX_RETRIES) {
+                setTimeout(() => fetchSeller(retryCount + 1), 3000);
+            } else {
+                toast.error('Failed to load seller data. Please refresh the page.');
+            }
+        }
     };
 
     const handleCreate = () => {
@@ -43,7 +52,7 @@ function App() {
 
     return (
         <div style={{maxWidth: '1000px', margin: '0 auto', padding: '20px'}}>
-        <Toaster position="top-right" />
+            <Toaster position="top-right"/>
             <h1>Campaign Manager</h1>
 
             {seller && (
