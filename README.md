@@ -61,6 +61,22 @@ npm run dev
 
 Frontend runs on http://localhost:5173
 
+## Tests
+
+Unit tests are written with JUnit 5 and Mockito.
+
+To run tests:
+```bash
+cd backend
+./mvnw test
+```
+
+To generate coverage report:
+```bash
+./mvnw test
+open target/site/jacoco/index.html
+```
+
 ## Live Demo
 
 - Frontend: https://futurum-tech-interview-1.onrender.com
