@@ -67,6 +67,7 @@ function CampaignForm({campaign, seller, onSuccess, onCancel}) {
         if (!formData.campaignFund || formData.campaignFund < 0.01) newErrors.campaignFund = 'Campaign fund is mandatory';
         if (seller && parseFloat(formData.campaignFund) > seller.emeraldBalance) newErrors.campaignFund = ' Insufficient funds';
         if (!formData.radius || formData.radius < 1) newErrors.radius = 'Radius must be at least 1km';
+        if (formData.radius > 500) newErrors.radius = 'Radius cannot exceed 500km';
         return newErrors;
     };
 

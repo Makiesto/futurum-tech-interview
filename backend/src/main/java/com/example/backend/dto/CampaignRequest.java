@@ -30,5 +30,6 @@ public class CampaignRequest {
 
     @NotNull(message = "Radius is mandatory")
     @Min(value = 1, message = "Radius must be at least 1km")
+    @Max(value = 500, message = "Radius cannot exceed 500km")
     private Double radius;
 }
