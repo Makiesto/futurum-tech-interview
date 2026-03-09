@@ -26,8 +26,8 @@ public class Campaign {
     @NotBlank(message = "Campaign name is mandatory")
     private String name;
 
-    @ElementCollection
     @Size(min=1, message = "At least one keyword is required")
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> keywords;
 
     @NotNull(message = "Bid amount is mandatory")
