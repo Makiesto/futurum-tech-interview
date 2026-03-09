@@ -68,6 +68,9 @@ function CampaignForm({campaign, seller, onSuccess, onCancel}) {
         if (formData.keywords.length === 0) newErrors.keywords = 'At least one keyword is required';
         if (!formData.bidAmount || formData.bidAmount < 0.01) newErrors.bidAmount = 'Bid amount must be at least 0.01';
         if (!formData.campaignFund || formData.campaignFund < 0.01) newErrors.campaignFund = 'Campaign fund is mandatory';
+        if (parseFloat(formData.bidAmount) > parseFloat(formData.campaignFund)) {
+            newErrors.bidAmount = 'Bid amount cannot exceed campaign fund';
+        }
 
         const availableBalance = campaign
             ? seller.emeraldBalance + parseFloat(campaign.campaignFund || 0)
